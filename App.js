@@ -1,11 +1,26 @@
 import React from 'react';
 import {Button, NativeEventEmitter, NativeModules, StyleSheet, Text, View} from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import MainAppbar from './src/components/MainAppbar';
+import HomeScreen from './src/components/HomeScreen'
 import ToastExample from './src/packages/Modules';
 
-//TODO : remove toolbarandroid lib
+const Drawer = createDrawerNavigator();
+
+function _HomeScreen({ navigation }) {
+  return (<HomeScreen what={1}/>);
+}
+
+function SettingScreen({ navigation }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button onPress={() => navigation.goBack()} title="Go back home" />
+    </View>
+  );
+}
+
 export default class App extends React.Component {
 
   componentDidMount() {
@@ -25,14 +40,17 @@ export default class App extends React.Component {
   }
 
   render() {
+    // return(
+    //   <HomeScreen></HomeScreen>
+    // )
     return (
       <PaperProvider>
-        <MainAppbar/>
-        <Text>Hi</Text>
-        <Button
-          onPress={() => this._onPress()}
-          title={'Toast'}
-        />
+        <NavigationContainer>
+          <Drawer.Navigator initialRouteName="Home" edgeWidth={50}>
+            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen name="Notifications" component={SettingScreen} />
+          </Drawer.Navigator>
+        </NavigationContainer>
       </PaperProvider>
     );
   }
@@ -43,9 +61,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   toolbar: {
-    backgroundColor: '#2196F3',
-    height: 56,
-    alignSelf: 'stretch',
-    textAlign: 'center',
    }
 })
