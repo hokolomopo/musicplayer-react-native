@@ -40,7 +40,7 @@ export default class App extends React.Component {
 
   render() {
     // return(
-    //   <HomeScreen></HomeScreen>
+    //   <RecycleTestComponent></RecycleTestComponent>
     // )
     return (
       <ReduxProvider store={Store}>
