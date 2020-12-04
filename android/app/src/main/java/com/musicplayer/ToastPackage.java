@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class CustomPackages implements ReactPackage {
+public class ToastPackage implements ReactPackage {
 
 	@Override
 	public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
@@ -22,6 +22,7 @@ public class CustomPackages implements ReactPackage {
 		List<NativeModule> modules = new ArrayList<>();
 
 		modules.add(new ToastModule(reactContext));
+		modules.add(new MediaModule(reactContext));
 
 		return modules;
 	}

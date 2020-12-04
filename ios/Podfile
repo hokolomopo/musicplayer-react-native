@@ -10,7 +10,6 @@ target 'MusicPlayer' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  pod 'toolbar-android', :path => '../node_modules/@react-native-community/toolbar-android'
 
   target 'MusicPlayerTests' do
     inherit! :complete

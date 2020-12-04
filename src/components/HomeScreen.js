@@ -1,29 +1,17 @@
 import React from 'react';
-import ViewPager from '@react-native-community/viewpager';
 import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { connect } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack';
 
 import MainAppbar from './MainAppbar';
-import TabComponent from './TabComponent';
+import MediaModule from '../packages/Modules';
+import TabComponent from './tabs/TabComponent';
 
 const data = ["a", "z","e","r","t","y","u","i","o","p","q","s","d","f","g","h","j","k","l","m","ù","w","x"]
 
 
-const FirstRoute = () => (
-  <View style={{ backgroundColor: '#ff4081', flex: 1}}>
-      <FlatList
-            data={data}
-            keyExtractor={(item) => item.toString()}
-            renderItem={({item}) => <Text style={styles.bigText}>{item}</Text>}
-        />
-    </View>
-);
-
-const SecondRoute = () => (
-  <View style={{ backgroundColor: '#673ab7', flex: 1}} />
-);
 
 const Stack = createStackNavigator();
 
@@ -34,19 +22,19 @@ class HomeScreen extends React.Component {
     constructor(props) {
         super(props)
     
-        this.renderScene = SceneMap({
-                first: FirstRoute,
-                second: SecondRoute,
-            });
-
-        this.state = {
-             index: 0,
-             routes: [
-            { key: 'first', title: 'First' },
-            { key: 'second', title: 'Second' },]
-        };
     }
-    
+
+    componentDidMount(){
+        this._getSongs()
+    }
+
+    async _getSongs() {
+        console.log("GetSongs")
+        const media = await MediaModule.getMedia();
+        const action = { type: "UPDATE_SONGS", value: media }
+        this.props.dispatch(action)
+    }
+
     _onTouch = () => {
         this.props.navigation.navigate("CurrentSong",  {})
     }
@@ -102,4 +90,14 @@ const styles = StyleSheet.create({
 
 });
 
-export default HomeScreen;
+
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    songs: state.songs
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  null
+)(HomeScreen)
