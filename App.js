@@ -1,5 +1,7 @@
+import Icon from 'react-native-vector-icons/Foundation';
 import React from 'react';
-import {Button, NativeEventEmitter, NativeModules, PermissionsAndroid, StyleSheet, Text, View} from 'react-native';
+import {Button, NativeModules, PanResponder, Pressable, StyleSheet, Text, View} from 'react-native';
+import { MenuProvider } from 'react-native-popup-menu';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux'
@@ -12,56 +14,69 @@ import ToastExample from './src/packages/Modules';
 
 const Drawer = createDrawerNavigator();
 
+function onTouch1(){
+  console.log("OnTouch1")
+}
+
+function onTouch2(){
+  console.log("OnTouch2")
+}
+
 function SettingScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button onPress={requestPermission} title="Go back home" />
+      <Pressable style={{ height:100, backgroundColor:"orange", justifyContent:"center"}}  onPress={onTouch1}>
+        <Pressable style={{ height:50, backgroundColor:"red"}}  onPress={onTouch2}>
+              <Icon name="previous" size={40} color="black" style={{marginRight : 6}} />
+        </Pressable>
+      </Pressable>
     </View>
   );
 }
 
 export default class App extends React.Component {
 
-  componentDidMount() {
-    const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
-    this.eventListener = eventEmitter.addListener('Event', (event) => {
-       console.log(event)
-    });
-  }
-
-  componentWillUnmount() {
-    this.eventListener.remove();
-  }
-
   _onPress(){
     console.log("On press?")
     ToastExample.show('Awesome', ToastExample.SHORT)
   }
 
+
   render() {
     // return(
-    //   <RecycleTestComponent></RecycleTestComponent>
+    //     <View style={{backgroundColor:"black", height:100}}></View>
     // )
+
     return (
+
       <ReduxProvider store={Store}>
         <PaperProvider>
-          <NavigationContainer>
-            <Drawer.Navigator initialRouteName="Home" edgeWidth={50}>
-              <Drawer.Screen name="Home" component={HomeScreen} />
-              <Drawer.Screen name="Notifications" component={SettingScreen} />
-            </Drawer.Navigator>
-          </NavigationContainer>
+          <MenuProvider backHandler={true}>
+            <NavigationContainer>
+              <Drawer.Navigator initialRouteName="Home" edgeWidth={50}>
+                <Drawer.Screen name="Home" component={HomeScreen} />
+                <Drawer.Screen name="Notifications" component={SettingScreen} />
+              </Drawer.Navigator>
+            </NavigationContainer>
+          </MenuProvider>
         </PaperProvider>
       </ReduxProvider>    
     );
   }
 }
 
+
+
 const styles = StyleSheet.create({
   main_container: {
     flex: 1,
   },
   toolbar: {
+   },
+   test:{
+     backgroundColor:"black",
+     flex:1
    }
 })
 

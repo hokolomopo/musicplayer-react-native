@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, NativeEventEmitter, NativeModules, StyleSheet, Text, View} from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux'
@@ -7,9 +7,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import MainAppbar from './MainAppbar';
 import MediaModule from '../packages/Modules';
-import TabComponent from './tabs/TabComponent';
+import TabsScreen from './tabs/TabsScreen';
 
-const data = ["a", "z","e","r","t","y","u","i","o","p","q","s","d","f","g","h","j","k","l","m","ù","w","x"]
+const { EVENT_SONG_CHANGED , EVENT_PLAY_PAUSE} = MediaModule.getConstants();
 
 
 
@@ -25,30 +25,36 @@ class HomeScreen extends React.Component {
     }
 
     componentDidMount(){
+        const eventEmitter = new NativeEventEmitter(NativeModules.MediaModule);
+        this.eventListener = eventEmitter.addListener(EVENT_SONG_CHANGED, (event) => {
+          console.log("Update current song event");
+          const action = { type: "UPDATE_CURRENT_SONG", value: event.currentSong }
+          this.props.dispatch(action)
+        });
+        this.eventListener = eventEmitter.addListener(EVENT_PLAY_PAUSE, (event) => {
+          console.log("Event play pause event");
+          const action = { type: "UPDATE_PLAY_STATE", value: event.playState }
+          this.props.dispatch(action)
+        });
+
         this._getSongs()
+    }
+
+    componentWillUnmount() {
+      this.eventListener.remove();
     }
 
     async _getSongs() {
         console.log("GetSongs")
         const media = await MediaModule.getMedia();
-        const action = { type: "UPDATE_SONGS", value: media }
+        
+        let aa = [...media]
+        aa = media.slice(0, 100)
+
+        const action = { type: "UPDATE_SONGS", value: aa }
         this.props.dispatch(action)
     }
 
-    _onTouch = () => {
-        this.props.navigation.navigate("CurrentSong",  {})
-    }
-
-    _Home = () => {
-        return(
-            <View style={styles.container}>
-                <TabComponent/>
-                <TouchableOpacity onPressOut = { this._onTouch } style={styles.currentSong}>
-                    <Text>CurrentSong</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    }
 
     _CurrentSong(){
         return(
@@ -59,7 +65,7 @@ class HomeScreen extends React.Component {
   render() {
     return (
       <Stack.Navigator initialRouteName="Home" edgeWidth={50} style={styles.stackNavigator} screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Home" component={this._Home}/>
+            <Stack.Screen name="Home" component={TabsScreen}/>
             <Stack.Screen name="CurrentSong" component={this._CurrentSong}/> 
       </Stack.Navigator>
     );

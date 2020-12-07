@@ -1,29 +1,32 @@
 package com.musicplayer;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Notification;
-import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.musicplayer.data.Song;
+import com.musicplayer.service.MediaService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -31,16 +34,27 @@ import androidx.core.content.ContextCompat;
 public class MediaModule extends ReactContextBaseJavaModule {
 	public static final String TAG = MainActivity.TAG;
 
+	public static final String EVENT_SONG_CHANGED = "EVENT_SONG_CHANGED";
+	public static final String EVENT_PLAY_PAUSE = "EVENT_PLAY_PAUSE";
+
+	private static final String DURATION_LONG_KEY = "LONG";
+
 	private static ReactApplicationContext reactContext;
 
-	private static final String DURATION_SHORT_KEY = "SHORT";
-	private static final String DURATION_LONG_KEY = "LONG";
+	private MediaService mediaService;
+	private boolean serviceBound = false;
+
 
 	MediaModule(ReactApplicationContext context) {
 		super(context);
 		reactContext = context;
-	}
 
+		if(mediaService == null) {
+			Intent intent = new Intent(reactContext, MediaService.class);
+			reactContext.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+		}
+
+	}
 
 	@Override
 	public String getName() {
@@ -56,9 +70,49 @@ public class MediaModule extends ReactContextBaseJavaModule {
 	@Override
 	public Map<String, Object> getConstants() {
 		final Map<String, Object> constants = new HashMap<>();
-		constants.put(DURATION_SHORT_KEY, Toast.LENGTH_SHORT);
-		constants.put(DURATION_LONG_KEY, Toast.LENGTH_LONG);
+		constants.put(EVENT_SONG_CHANGED, EVENT_SONG_CHANGED);
+		constants.put(EVENT_PLAY_PAUSE, EVENT_PLAY_PAUSE);
 		return constants;
+	}
+
+	@ReactMethod
+	public void init(ReadableArray array, int startIndex) {
+		ArrayList<Song> playlist = new ArrayList<>();
+		Log.i(TAG, "MediaModule " + "init at index " + startIndex);
+
+		for(int i = 0;i < array.size();i++){
+			playlist.add(new Song(array.getMap(i)));
+		}
+		mediaService.init(playlist, startIndex, true);
+	}
+
+	@ReactMethod
+	public void playPause() {
+		Log.i(TAG, "MediaModule playPause");
+
+		mediaService.playPause();
+	}
+
+	@ReactMethod
+	public void next() {
+		Log.i(TAG, "MediaModule nextSong");
+
+		mediaService.nextSong();
+	}
+
+	@ReactMethod
+	public void previous() {
+		Log.i(TAG, "MediaModule previousSong");
+
+		mediaService.previousSong();
+	}
+
+
+	//TODO delete this
+	private boolean hasReadPermission(){
+		return ContextCompat.checkSelfPermission(reactContext,
+				Manifest.permission.READ_EXTERNAL_STORAGE)
+				== PackageManager.PERMISSION_GRANTED;
 	}
 
 	@ReactMethod
@@ -104,5 +158,23 @@ public class MediaModule extends ReactContextBaseJavaModule {
 
 		promise.resolve(array);
 	}
+
+	/** Defines callbacks for service binding, passed to bindService() */
+	private ServiceConnection serviceConnection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName className,
+									   IBinder service) {
+			// We've bound to LocalService, cast the IBinder and get LocalService instance
+			MediaService.MediaBinder binder = (MediaService.MediaBinder) service;
+			mediaService = binder.getService();
+			serviceBound = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			serviceBound = false;
+		}
+	};
 
 }

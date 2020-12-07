@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
 
-import updateSongs from './SongReducer'
+import songReducer from './SongReducer'
 
-export default createStore(updateSongs)
+export default createStore(songReducer)
