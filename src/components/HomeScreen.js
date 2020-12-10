@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack';
 
+import CurrentSongScreen from './CurrentSongScreen';
 import MainAppbar from './MainAppbar';
 import MediaModule from '../packages/Modules';
 import TabsScreen from './tabs/TabsScreen';
@@ -56,17 +57,12 @@ class HomeScreen extends React.Component {
     }
 
 
-    _CurrentSong(){
-        return(
-            <Text>CurrentSong</Text>
-        )
-    }
 
   render() {
     return (
       <Stack.Navigator initialRouteName="Home" edgeWidth={50} style={styles.stackNavigator} screenOptions={{headerShown: false}}>
             <Stack.Screen name="Home" component={TabsScreen}/>
-            <Stack.Screen name="CurrentSong" component={this._CurrentSong}/> 
+            <Stack.Screen name="CurrentSong" component={CurrentSongScreen}/> 
       </Stack.Navigator>
     );
   }

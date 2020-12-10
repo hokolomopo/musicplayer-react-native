@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 
 import MediaModule from '../packages/Modules';
 
-class CurrentSong extends React.Component {
+class CurrentSongBar extends React.Component {
 
     _previous = () =>{
         console.log("_previous")
@@ -25,13 +25,8 @@ class CurrentSong extends React.Component {
         MediaModule.next()
     }
 
-
-    _onStartShouldSetResponder(){
-        console.log("onStartShouldSetResponder Child")
-        return true
-    }
-
     render() {
+        //TODO animation onButtonPress
       return (
           <View style={styles.container}>
             <View style={styles.cover}></View>
@@ -119,4 +114,4 @@ const mapStateToProps = (state /*, ownProps*/) => {
 export default connect(
   mapStateToProps,
   null
-)(CurrentSong)
+)(CurrentSongBar)

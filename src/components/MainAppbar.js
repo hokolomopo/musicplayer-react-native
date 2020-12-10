@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 
 import MyMenuOption from './util/MyMenuOption';
 import RadioButtonRN from './util/RadioButtonRN';
-import RoundIconButton from './lists/RoundIconButton';
+import RoundIconButton from './util/RoundIconButton';
 import SortByAlert from './util/SortByAlert';
 import {SORT_SONGS_BY_VALUES} from '../store/UIReducer';
 import { SongTabActions } from './tabs/ActionsByTabs';
@@ -137,8 +137,6 @@ class MainAppbar extends React.Component {
     }
 
     render() {
-      console.log("MainAppBarRender")
-
       let bar = null
       if(this.state.isSearching == false){
         bar = this.StandardBar()

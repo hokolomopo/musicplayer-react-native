@@ -3,7 +3,7 @@ import {Animated, Dimensions, FlatList, PanResponder, StyleSheet, Text, Touchabl
 import { BaseScrollView, DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
 import { connect } from 'react-redux'
 
-import ScrollableRecyclerView from './ScrollableRecyclerView';
+import ScrollableRecyclerView from '../util/ScrollableRecyclerView';
 import SongItem from '../lists/SongItem'
 
 const dataProvider = new DataProvider((r1, r2) => {

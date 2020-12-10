@@ -4,7 +4,7 @@ import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { connect } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack';
 
-import CurrentSong from '../CurrentSong';
+import CurrentSongBar from '../CurrentSongBar';
 import MainAppbar from '../MainAppbar';
 import SongsList from './SongsList'
 
@@ -78,7 +78,6 @@ class TabsScreen extends React.Component {
         })
 
     _onTouch = () => {
-        console.log("CurrentSongOnTouch")
         this.props.navigation.navigate("CurrentSong",  {})
     }
 
@@ -114,7 +113,7 @@ class TabsScreen extends React.Component {
                     initialLayout={initialLayout}
                     />
                 <View {...this.panResponder.panHandlers} onLayout={this._onLayout}>
-                    <CurrentSong/>
+                    <CurrentSongBar/>
                 </View>
             </View>
         );

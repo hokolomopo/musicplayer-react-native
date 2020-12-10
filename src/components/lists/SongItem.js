@@ -1,6 +1,6 @@
 import Icon from 'react-native-vector-icons/Entypo';
 import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from 'react-native-popup-menu';
 
 import MediaModule from '../../packages/Modules';
@@ -39,8 +39,9 @@ class SongItem extends React.Component {
     }
 
     render(){
+        //TODO implement animation that activate only on onTouchUp to avoir animation while scrolling
         return(
-            <TouchableNativeFeedback onPress={this._onSongClick}>
+            <TouchableWithoutFeedback onPress={this._onSongClick}>
                 <View style={styles.listItemView}>
                     <View style={styles.cover}></View>
                     <View style={styles.textContainer}>
@@ -53,7 +54,7 @@ class SongItem extends React.Component {
                     </View>
                     {this._SongMenu()}
                 </View>
-            </TouchableNativeFeedback>)
+            </TouchableWithoutFeedback>)
     }
     
 }
