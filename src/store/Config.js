@@ -1,5 +1,13 @@
-import { createStore } from 'redux';
+import { combineReducers, createStore } from 'redux';
 
-import songReducer from './SongReducer'
+import MediaReducer from './SongReducer'
+import UIReducer from './UIReducer'
 
-export default createStore(songReducer)
+const rootReducer = combineReducers({
+    MediaReducer, 
+    UIReducer, 
+  })
+  
+const store = createStore(rootReducer)
+
+export default store

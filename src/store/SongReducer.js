@@ -1,6 +1,6 @@
-const initialState = { songs: [] , currentSong:{title:"title", artist:"artist"}, playState:"pause"}
+const initialState = { songs: [{title:"title", artist:"artist"}] , currentSong:{title:"title", artist:"artist"}, playState:"pause"}
 
-function songReducer(state = initialState, action) {
+function MediaReducer(state = initialState, action) {
     switch (action.type) {
     case 'UPDATE_SONGS':
         nextState = {
@@ -26,4 +26,4 @@ function songReducer(state = initialState, action) {
     }
   }
 
-  export default songReducer
+  export default MediaReducer

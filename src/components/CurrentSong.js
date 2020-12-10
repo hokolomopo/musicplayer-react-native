@@ -10,6 +10,9 @@ class CurrentSong extends React.Component {
     _previous = () =>{
         console.log("_previous")
         MediaModule.previous()
+        // const action = { type: "UPDATE_SONGS", value: [{artist:"This is", title:"" + Math.random()}] }
+        // this.props.dispatch(action)
+
     }
 
     _play = () =>{
@@ -107,8 +110,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state /*, ownProps*/) => {
   return {
-    song: state.currentSong,
-    playState: state.playState
+    song: state.MediaReducer.currentSong,
+    playState: state.MediaReducer.playState
   }
 }
 

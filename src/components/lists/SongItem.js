@@ -1,6 +1,6 @@
 import Icon from 'react-native-vector-icons/Entypo';
 import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from 'react-native-popup-menu';
 
 import MediaModule from '../../packages/Modules';
@@ -35,11 +35,12 @@ class SongItem extends React.Component {
         console.log("OnSongclick")
         var playlist = this.props.getPlaylist();
         MediaModule.init(playlist, playlist.findIndex(item => (item.artist === this.props.artist && item.title === this.props.title)))
+
     }
 
     render(){
         return(
-            <TouchableWithoutFeedback onPress={this._onSongClick}>
+            <TouchableNativeFeedback onPress={this._onSongClick}>
                 <View style={styles.listItemView}>
                     <View style={styles.cover}></View>
                     <View style={styles.textContainer}>
@@ -52,7 +53,7 @@ class SongItem extends React.Component {
                     </View>
                     {this._SongMenu()}
                 </View>
-            </TouchableWithoutFeedback>)
+            </TouchableNativeFeedback>)
     }
     
 }

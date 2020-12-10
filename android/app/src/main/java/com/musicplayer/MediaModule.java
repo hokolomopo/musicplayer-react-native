@@ -88,7 +88,7 @@ public class MediaModule extends ReactContextBaseJavaModule {
 
 	@ReactMethod
 	public void playPause() {
-		Log.i(TAG, "MediaModule playPause");
+		Log.i(TAG, "MediaModule playPaAlertuse");
 
 		mediaService.playPause();
 	}

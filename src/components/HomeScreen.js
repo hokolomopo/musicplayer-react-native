@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, NativeEventEmitter, NativeModules, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, NativeEventEmitter, NativeModules, StyleSheet, Text, TextInput} from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux'
@@ -15,7 +15,6 @@ const { EVENT_SONG_CHANGED , EVENT_PLAY_PAUSE} = MediaModule.getConstants();
 
 const Stack = createStackNavigator();
 
-const initialLayout = { width: Dimensions.get('window').width };
 
 class HomeScreen extends React.Component {
 
@@ -49,8 +48,9 @@ class HomeScreen extends React.Component {
         const media = await MediaModule.getMedia();
         
         let aa = [...media]
-        aa = media.slice(0, 100)
-
+        aa = media.slice(0, 15)
+        // console.log(aa)
+        
         const action = { type: "UPDATE_SONGS", value: aa }
         this.props.dispatch(action)
     }

@@ -1,6 +1,6 @@
 import Icon from 'react-native-vector-icons/Foundation';
 import React from 'react';
-import {Button, NativeModules, PanResponder, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Button, PanResponder, PermissionsAndroid, Pressable, StyleSheet, Text, View} from 'react-native';
 import { MenuProvider } from 'react-native-popup-menu';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -42,6 +42,9 @@ export default class App extends React.Component {
     ToastExample.show('Awesome', ToastExample.SHORT)
   }
 
+  componentDidMount(){
+    requestPermission()
+  }
 
   render() {
     // return(
@@ -49,7 +52,6 @@ export default class App extends React.Component {
     // )
 
     return (
-
       <ReduxProvider store={Store}>
         <PaperProvider>
           <MenuProvider backHandler={true}>
@@ -82,51 +84,52 @@ const styles = StyleSheet.create({
 
 
 const requestPermission = async () => {
-  const media = await MediaModule.getMedia();
+  // const media = await MediaModule.getMedia();
 
-  var t0 = performance.now()
-  var artists = new Set()
-  var albums = new Set()
-  var folders = new Set()
+  // var t0 = performance.now()
+  // var artists = new Set()
+  // var albums = new Set()
+  // var folders = new Set()
 
-  media.map((song) => {
-    artists.add(song.artist)
-    albums.add(song.albums)
-    folders.add(song.folder)
-  });
+  // media.map((song) => {
+  //   artists.add(song.artist)
+  //   albums.add(song.albums)
+  //   folders.add(song.folder)
+  // });
 
 
-  var t1 = performance.now()
-  console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
-  console.log("Number of artists : " + artists.size)
+  // var t1 = performance.now()
+  // console.log("Call to doSomething took " + (t1 - t0) + " milliseconds.")
+  // console.log("Number of artists : " + artists.size)
 
-  console.log(artists)
+  // console.log(artists)
 
-  // try {
-  //   const granted = await PermissionsAndroid.request(
-  //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-  //     {
-  //       title: "MusicPlayer Storage Permission",
-  //       message:
-  //         "MusicPlayers needs to access your files to work",
-  //       buttonNegative: "Cancel",
-  //       buttonPositive: "OK"
-  //     }
-  //   );
-  //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //     console.log("You can use the camera");
-  //   } else {
-  //     console.log("Camera permission denied");
-  //   }
-  //   const hasPerm = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
-  //   console.log(hasPerm)
-  //     if (hasPerm === true) {
-  //     console.log("You can use the camera");
-  //   } else {
-  //     console.log("Camera permission denied");
-  //   }
+  //TODO : refresh songs on permission grant
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: "MusicPlayer Storage Permission",
+        message:
+          "MusicPlayers needs to access your files to work",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      // console.log("You can use the camera");
+    } else {
+      // console.log("Camera permission denied");
+    }
+    const hasPerm = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
+    console.log(hasPerm)
+      if (hasPerm === true) {
+      // console.log("You can use the camera");
+    } else {
+      // console.log("Camera permission denied");
+    }
 
-  // } catch (err) {
-  //   console.warn(err);
-  // }
+  } catch (err) {
+    console.warn(err);
+  }
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Animated, Dimensions, PanResponder, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, PanResponder, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { connect } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack';
@@ -36,7 +36,7 @@ class TabsScreen extends React.Component {
             renderScene: null,
              index: 0,
              tabs: [
-            { key: 'first', title: 'Titles' },
+            { key: 'titles', title: 'Titles' },
             { key: 'second', title: 'Second' },{ key: 'third', title: 'third' },{ key: 'fourth', title: 'fourth' },{ key: 'fifth', title: 'fifth' },]
         };
     }
@@ -96,7 +96,7 @@ class TabsScreen extends React.Component {
     render() {
         if(this.state.renderScene == null){
             this.state.renderScene = SceneMap({
-                    first: SongsTab,
+                    titles: SongsTab,
                     second: SecondRoute,
                     third: SecondRoute,
                     fourth: SecondRoute,
@@ -105,7 +105,7 @@ class TabsScreen extends React.Component {
         }
         return (
             <View style={styles.container}> 
-                <MainAppbar />
+                <MainAppbar title="MusicPlayer" navigation={this.props.navigation} currentTab={this.state.tabs[this.state.index].key}/>
                 <TabView
                     renderTabBar={renderTabBar}
                     navigationState={{index : this.state.index, routes: this.state.tabs}}
@@ -125,15 +125,17 @@ export default TabsScreen
 
 class _SongsTab extends React.Component {
     render(){
+        console.log("SongTab render")
         return (
-            <SongsList style={styles.container} songs={this.props.songs}/>
+            <SongsList style={styles.container} songs={this.props.songs} sortBy={this.props.sortBy}/>
         )
     }
 }
 
 const mapStateToProps = (state) => {
   return {
-    songs: state.songs
+    songs: state.MediaReducer.songs,
+    sortBy: state.UIReducer.sortSongsBy
   }
 }
 

@@ -1,0 +1,15 @@
+- ARtist tab
+- Albums tab
+- foldr tab
+- AppBar
+- Search
+- SettingScreen
+- CurrentsongScreen
+- CurrentPlaylistScree
+- SongItem menu
+- SelectedSong in list
+
+
+
+- Equalizer
+- Minuteur de sommeil

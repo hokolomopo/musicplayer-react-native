@@ -13,7 +13,7 @@ const dataProvider = new DataProvider((r1, r2) => {
 
 
 
-class SongsList extends React.Component {
+class SongsList extends React.Component  {
     
     constructor(props) {
         super(props)
@@ -29,6 +29,9 @@ class SongsList extends React.Component {
             }
         );
 
+    }
+    
+    _getSortedSongs = () => {
         let sortedArray = [...this.props.songs]
         switch(this.props.sortBy){
             case "artist":
@@ -39,20 +42,15 @@ class SongsList extends React.Component {
                 break;
 
         }
-
-
-        this.state = {
-             songs: sortedArray
-        }
-
-    }
+        return sortedArray
+    }    
     
     _Separator(){
         return(<View style={styles.separator}/>)
     }
 
     _getPlaylist = () =>{
-        return this.state.songs
+        return this.props.songs
     }
 
     _rowRenderer = (type, data) =>{
@@ -65,8 +63,10 @@ class SongsList extends React.Component {
 
     }
 
-    _dataProvider(data){
-        return dataProvider.cloneWithRows(data)        
+    _DataProvider(){
+        return new DataProvider((r1, r2) => {
+            return (r1.artist !== r2.artist) || (r1.title !== r2.title); 
+        })       
     }
 
     _onPress = () =>{
@@ -75,13 +75,17 @@ class SongsList extends React.Component {
 
 
     render() {
-        return (
+        // console.log("Render SongList")
+        //TODO : end of preoject, verify that we only call render when the songs/the sort order change. If not, we call a sort function every time.
+
+        let toRender = this.props.songs.length == 0 ? null :
             <ScrollableRecyclerView 
-                    dataProvider={dataProvider}
-                    rowRenderer={this._rowRenderer}
-                    itemHeight={70}
-                    data={this.state.songs}/>
-        );
+            getDataProvider={this._DataProvider()}
+            rowRenderer={this._rowRenderer}
+            itemHeight={70}
+            data={this._getSortedSongs()}/>
+        
+        return toRender
     }
 }
 

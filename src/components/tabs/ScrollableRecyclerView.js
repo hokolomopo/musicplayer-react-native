@@ -58,12 +58,12 @@ class ScrollableRecyclerView extends React.Component {
 
             // We've got to take into account that the list index is the index of the FIRST item of the list displayed
             let itemsPerPage = Math.floor(this.heightScrollBar / this.props.itemHeight)
-            let dataLenght = this.props.data.length - itemsPerPage + 1
+            let dataLenght = Math.max(this.props.data.length - itemsPerPage + 1, 1)
 
             let currentPos = (panValue + this.pan._offset) / (cursorMaxY)
             let index = Math.floor(dataLenght * currentPos)
             index = Math.min(Math.max(index, 0), dataLenght - 1);
-
+            
             this.flatListRef.scrollToIndex(index)     
         },
         onPanResponderRelease: () => {
@@ -123,9 +123,10 @@ class ScrollableRecyclerView extends React.Component {
     }
 
     render() {
-        //TODO change this
-        let data = this.props.data != undefined ? this.props.data : [{title : "no", artist : "One"}]
+        // console.log("Render ScrollableRecyclerView" )
+        // console.log(this.props.data)
         this.heightScrollCursor = this._getScrollCursorHeight()
+
 
         return (
             <View style={styles.vertiContainer}>
@@ -133,21 +134,22 @@ class ScrollableRecyclerView extends React.Component {
                     style={styles.container}
                     ref={(ref) => { this.flatListRef = ref; }}
                     layoutProvider={this._layoutProvider} 
-                    dataProvider={this.props.dataProvider.cloneWithRows(data)} 
+                    dataProvider={this.props.getDataProvider.cloneWithRows(this.props.data)} 
                     rowRenderer={this.props.rowRenderer} 
                     renderAheadOffset={1000}
                     showsVerticalScrollIndicator={false}
                     onScroll={this._onScroll}/>
-               <View 
-                    style={styles.scrollBarBackground} 
-                    opacity={0.7}
-                    ref={(ref) => { this.scrollbarRef = ref; }}
-                    onLayout={this._onLayout}>
-                        <Animated.View 
-                            style={[styles.scrollBarCursor, {transform:[{translateY : this.pan}], height:this.heightScrollCursor}]} 
-                            hitSlop={{top: 50, bottom: 50, left: 50, right: 50}}
-                            {...this.panResponder.panHandlers}/>
-                </View>
+               {this.props.data.length >= 10 ? 
+                    <View 
+                        style={styles.scrollBarBackground} 
+                        opacity={0.7}
+                        ref={(ref) => { this.scrollbarRef = ref; }}
+                        onLayout={this._onLayout}>
+                            <Animated.View 
+                                style={[styles.scrollBarCursor, {transform:[{translateY : this.pan}], height:this.heightScrollCursor}]} 
+                                hitSlop={{top: 50, bottom: 50, left: 50, right: 50}}
+                                {...this.panResponder.panHandlers}/>
+                    </View> : null}
             </View>
         );
     }
