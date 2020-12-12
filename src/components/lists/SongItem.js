@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     listItemView: {
         height: 70,
         flexDirection: "row",
-        alignItems: "center"
+        alignItems: "center",
     },
     cover: {
         height: 60,

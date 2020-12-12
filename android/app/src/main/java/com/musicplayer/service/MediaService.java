@@ -347,8 +347,8 @@ public class MediaService extends Service implements MediaPlayer.OnErrorListener
 		}catch(IOException e){
 			Toast.makeText(getApplication(),"Could not open song file", Toast.LENGTH_SHORT).show();
 			Log.e(TAG, e.getMessage());
-		}catch(IllegalStateException e){
-			Log.e(TAG, "IllegalState start");
+		}catch(Exception e){
+			Log.e(TAG, e.getMessage());
 		}
 
 	}

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-community/slider": "^3.0.3",
     "@react-native-community/viewpager": "^3.3.1",
     "@react-navigation/bottom-tabs": "^5.11.2",
     "@react-navigation/drawer": "^5.11.4",
@@ -20,6 +21,7 @@
     "react-native": "0.63.4",
     "react-native-awesome-alerts": "^1.4.2",
     "react-native-gesture-handler": "^1.9.0",
+    "react-native-linear-gradient": "^2.5.6",
     "react-native-paper": "^4.4.1",
     "react-native-permissions": "^3.0.0",
     "react-native-popup-menu": "^0.15.9",
@@ -27,6 +29,7 @@
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "^2.15.0",
     "react-native-tab-view": "^2.15.2",
+    "react-native-text-ticker": "^1.10.0",
     "react-native-vector-icons": "^7.1.0",
     "react-redux": "^7.2.2",
     "recyclerlistview": "^3.0.0",

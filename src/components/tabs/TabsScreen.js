@@ -1,11 +1,13 @@
+import LinearGradient from 'react-native-linear-gradient';
 import React from 'react';
-import {Dimensions, PanResponder, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Dimensions, PanResponder, StatusBar, StyleSheet, Text, TextInput, View} from 'react-native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import { connect } from 'react-redux'
 import { createStackNavigator } from '@react-navigation/stack';
 
 import CurrentSongBar from '../CurrentSongBar';
 import MainAppbar from '../MainAppbar';
+import MediaModule from '../../packages/Modules';
 import SongsList from './SongsList'
 
 const SecondRoute = () => (
@@ -40,6 +42,19 @@ class TabsScreen extends React.Component {
             { key: 'second', title: 'Second' },{ key: 'third', title: 'third' },{ key: 'fourth', title: 'fourth' },{ key: 'fifth', title: 'fifth' },]
         };
     }
+
+    componentDidMount() {
+        MediaModule.changeNavBarColor("white")
+        
+        this.navListener = this.props.navigation.addListener('focus', (e) => {
+            MediaModule.changeNavBarColor("white")
+        });
+
+    }
+
+    componentWillUnmount() {
+        this.props.navigation.removeListener(this.navListener)
+      }
 
     currentSongViewY = 0
     touchDowntime = 0
@@ -104,6 +119,7 @@ class TabsScreen extends React.Component {
         }
         return (
             <View style={styles.container}> 
+                <StatusBar backgroundColor="rgba(0,0,0,1)" barStyle={"light-content"} translucent={true}/>
                 <MainAppbar title="MusicPlayer" navigation={this.props.navigation} currentTab={this.state.tabs[this.state.index].key}/>
                 <TabView
                     renderTabBar={renderTabBar}
@@ -124,7 +140,6 @@ export default TabsScreen
 
 class _SongsTab extends React.Component {
     render(){
-        console.log("SongTab render")
         return (
             <SongsList style={styles.container} songs={this.props.songs} sortBy={this.props.sortBy}/>
         )
@@ -142,8 +157,9 @@ const SongsTab = connect(mapStateToProps, null)(_SongsTab)
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 0,
-        flex: 1
+        flex: 1,
+        paddingTop: StatusBar.currentHeight,
+        // backgroundColor:"blue",
     },
     scene: {
         flex: 1,

@@ -1,6 +1,6 @@
 import Icon from 'react-native-vector-icons/Foundation';
 import React from 'react';
-import {Button, PanResponder, PermissionsAndroid, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Button, PermissionsAndroid, Pressable, StatusBar, StyleSheet, Text, View} from 'react-native';
 import { MenuProvider } from 'react-native-popup-menu';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -11,6 +11,8 @@ import HomeScreen from './src/components/HomeScreen'
 import MediaModule from './src/packages/Modules';
 import Store from './src/store/Config';
 import ToastExample from './src/packages/Modules';
+
+//TODO : init MediaPlayer somewhere
 
 const Drawer = createDrawerNavigator();
 
@@ -52,18 +54,21 @@ export default class App extends React.Component {
     // )
 
     return (
-      <ReduxProvider store={Store}>
-        <PaperProvider>
-          <MenuProvider backHandler={true}>
-            <NavigationContainer>
-              <Drawer.Navigator initialRouteName="Home" edgeWidth={50}>
-                <Drawer.Screen name="Home" component={HomeScreen} />
-                <Drawer.Screen name="Notifications" component={SettingScreen} />
-              </Drawer.Navigator>
-            </NavigationContainer>
-          </MenuProvider>
-        </PaperProvider>
-      </ReduxProvider>    
+      <View style={styles.main_container}>
+        <StatusBar backgroundColor="rgba(0,0,0,0)" barStyle={"light-content"} translucent={true}/>
+        <ReduxProvider store={Store}>
+          <PaperProvider>
+            <MenuProvider backHandler={true}>
+              <NavigationContainer>
+                <Drawer.Navigator initialRouteName="Home" edgeWidth={50}>
+                  <Drawer.Screen name="Home" component={HomeScreen} />
+                  <Drawer.Screen name="Notifications" component={SettingScreen} />
+                </Drawer.Navigator>
+              </NavigationContainer>
+            </MenuProvider>
+          </PaperProvider>
+        </ReduxProvider>   
+      </View> 
     );
   }
 }
@@ -77,7 +82,6 @@ const styles = StyleSheet.create({
   toolbar: {
    },
    test:{
-     backgroundColor:"black",
      flex:1
    }
 })

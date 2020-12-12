@@ -1,9 +1,9 @@
 import React from 'react';
-import {Dimensions, NativeEventEmitter, NativeModules, StyleSheet, Text, TextInput} from 'react-native';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import {LogBox, NativeEventEmitter, NativeModules, StatusBar, StyleSheet, Text, TextInput} from 'react-native';
 import { SceneMap, TabView } from 'react-native-tab-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux'
-import { createStackNavigator } from '@react-navigation/stack';
 
 import CurrentSongScreen from './CurrentSongScreen';
 import MainAppbar from './MainAppbar';
@@ -38,6 +38,7 @@ class HomeScreen extends React.Component {
         });
 
         this._getSongs()
+
     }
 
     componentWillUnmount() {
@@ -60,7 +61,15 @@ class HomeScreen extends React.Component {
 
   render() {
     return (
-      <Stack.Navigator initialRouteName="Home" edgeWidth={50} style={styles.stackNavigator} screenOptions={{headerShown: false}}>
+      <Stack.Navigator 
+          initialRouteName="Home" 
+          edgeWidth={50} 
+          style={styles.stackNavigator}
+          screenOptions={{
+            headerShown: false,
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS  }}
+            on
+          >
             <Stack.Screen name="Home" component={TabsScreen}/>
             <Stack.Screen name="CurrentSong" component={CurrentSongScreen}/> 
       </Stack.Navigator>
@@ -87,7 +96,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     stackNavigator: {
-
     },
 
 });

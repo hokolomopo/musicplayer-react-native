@@ -7,9 +7,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.Promise;
@@ -30,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
 
 public class MediaModule extends ReactContextBaseJavaModule {
 	public static final String TAG = MainActivity.TAG;
@@ -107,6 +111,20 @@ public class MediaModule extends ReactContextBaseJavaModule {
 		mediaService.previousSong();
 	}
 
+
+	//TODO maybe put this in another package if I make another package
+	@ReactMethod
+	private void changeNavBarColor(String color){
+		if (getCurrentActivity() != null && android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			Window window = getCurrentActivity().getWindow();
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					window.setNavigationBarColor(Color.parseColor(color));
+				}
+			});
+		}
+	}
 
 	//TODO delete this
 	private boolean hasReadPermission(){

@@ -1,9 +1,11 @@
 import Icon from 'react-native-vector-icons/Foundation';
 import React from 'react';
+import TextTicker from 'react-native-text-ticker'
 import { Pressable, StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
 import { connect } from 'react-redux'
 
 import MediaModule from '../packages/Modules';
+import {TextTickerOptions} from '../util/Constants'
 
 class CurrentSongBar extends React.Component {
 
@@ -32,10 +34,10 @@ class CurrentSongBar extends React.Component {
             <View style={styles.cover}></View>
             <View style={styles.textContainer}>
                 <View style={styles.artistTextContainer}>
-                    <Text numberOfLines={1} style={styles.artistText}>{this.props.song.artist}</Text>
+                    <TextTicker {...TextTickerOptions} style={styles.artistText}>{this.props.song.artist}</TextTicker>
                 </View>
                 <View  style={styles.titleTextContainer}>
-                    <Text numberOfLines={1} style={styles.titleText}>{this.props.song.title}</Text>
+                    <TextTicker {...TextTickerOptions} style={styles.titleText}>{this.props.song.title}</TextTicker>
                 </View>
             </View>
             <View style={styles.buttonsView}> 
