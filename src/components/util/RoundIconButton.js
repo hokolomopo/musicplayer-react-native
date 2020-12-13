@@ -11,8 +11,11 @@ class RoundIconButton extends React.Component {
     render() {
       return(
         <View style={this.props.style}>
-            <TouchableNativeFeedback onPress={this.props.onPress} background={TouchableNativeFeedback.Ripple(this.props.rippleColor, true)}
-                hitSlop={{top: this.props.hitSlop, bottom: this.props.hitSlop, left: this.props.hitSlop, right: this.props.hitSlop}}>
+            <TouchableNativeFeedback 
+                onPress={this.props.onPress} 
+                background={TouchableNativeFeedback.Ripple(this.props.rippleColor, true)}
+                hitSlop={{top: this.props.hitSlop, bottom: this.props.hitSlop, left: this.props.hitSlop, right: this.props.hitSlop}}
+                useForeground={true}>
                 <View style={styles.iconContainer}>
                     {this.props.icon != null ?
                         this.props.icon :

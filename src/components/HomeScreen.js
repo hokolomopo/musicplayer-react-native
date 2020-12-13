@@ -12,8 +12,6 @@ import TabsScreen from './tabs/TabsScreen';
 
 const { EVENT_SONG_CHANGED , EVENT_PLAY_PAUSE} = MediaModule.getConstants();
 
-
-
 const Stack = createStackNavigator();
 
 
@@ -50,7 +48,7 @@ class HomeScreen extends React.Component {
         const media = await MediaModule.getMedia();
         
         let aa = [...media]
-        aa = media.slice(0, 15)
+        aa = media.slice(0, 2)
         // console.log(aa)
         
         const action = { type: "UPDATE_SONGS", value: aa }

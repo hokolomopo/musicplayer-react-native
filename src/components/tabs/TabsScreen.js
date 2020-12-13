@@ -56,50 +56,6 @@ class TabsScreen extends React.Component {
         this.props.navigation.removeListener(this.navListener)
       }
 
-    currentSongViewY = 0
-    touchDowntime = 0
-
-    panResponder = PanResponder.create({
-        // Ask to be the responder:
-        onStartShouldSetPanResponder: () => true,
-        onStartShouldSetPanResponderCapture: () =>
-            false,
-        onMoveShouldSetPanResponder: () => false,
-        onMoveShouldSetPanResponderCapture: () =>
-            false,
-        onPanResponderTerminationRequest: () =>
-            false,
-        onShouldBlockNativeResponder: () => {
-            return false
-        },
-        onPanResponderGrant: (event, gestureState) => {          
-            this.touchDowntime = performance.now()
-        },
-        onPanResponderMove: (event, gestureState) => {
-            // console.log(gestureState)
-        },
-        onPanResponderRelease: (event, gestureState) => {
-            //End of touch inside the component
-            if(gestureState.moveY >= this.currentSongViewY)
-                this._onTouch()
-            
-            //Swipe up movement
-            let elapsedTime = performance.now() - this.touchDowntime
-            // console.log("ElapsedTime : " + elapsedTime + " dy : " + gestureState.dy)
-            if(elapsedTime < 300 && gestureState.dy < -60)
-                this._onTouch()
-        }
-
-        })
-
-    _onTouch = () => {
-        this.props.navigation.navigate("CurrentSong",  {})
-    }
-
-    _onLayout = (event) => {
-        this.currentSongViewY = event.nativeEvent.layout.y
-        // console.log(event.nativeEvent)
-    }
 
     SongsTab = () => {
         return(
@@ -128,9 +84,7 @@ class TabsScreen extends React.Component {
                     onIndexChange={(i) => {this.setState({ index: i })}}
                     initialLayout={initialLayout}
                     />
-                <View {...this.panResponder.panHandlers} onLayout={this._onLayout}>
-                    <CurrentSongBar/>
-                </View>
+                <CurrentSongBar navigation={this.props.navigation}/>
             </View>
         );
     }

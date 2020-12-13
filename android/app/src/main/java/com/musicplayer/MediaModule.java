@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -109,6 +110,21 @@ public class MediaModule extends ReactContextBaseJavaModule {
 		Log.i(TAG, "MediaModule previousSong");
 
 		mediaService.previousSong();
+	}
+
+	@ReactMethod
+	public WritableArray getPlaylist() {
+		Log.i(TAG, "MediaModule previousSong");
+
+		ArrayList<Song> playlist = mediaService.getPlaylist();
+
+
+		WritableArray array = Arguments.createArray();
+
+		for(Song s : playlist)
+			array.pushMap(s.toMap());
+
+		return array;
 	}
 
 

@@ -10,6 +10,7 @@ function UIReducer(state = initialState, action) {
             sortSongsBy : action.value
         }
         return nextState
+      return nextState  
     default:
       return state
     }

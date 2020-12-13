@@ -1,20 +1,14 @@
 package com.musicplayer.service;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 
@@ -22,7 +16,6 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.musicplayer.MainActivity;
 import com.musicplayer.MediaModule;
-import com.musicplayer.ToastModule;
 import com.musicplayer.data.Song;
 
 import java.io.IOException;
@@ -99,7 +92,7 @@ public class MediaService extends Service implements MediaPlayer.OnErrorListener
 			public void onPrepared(MediaPlayer mediaPlayer) {
 				if(isPlaying)
 					play();
-				advertisePlaylistChange();
+				advertiseSongChange();
 			}
 		});
 		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -241,7 +234,7 @@ public class MediaService extends Service implements MediaPlayer.OnErrorListener
 		else
 			stopShuffleMode();
 
-		advertisePlaylistChange();
+		advertiseSongChange();
 	}
 
 	public boolean isShuffleModeOn(){
@@ -297,7 +290,7 @@ public class MediaService extends Service implements MediaPlayer.OnErrorListener
 				shuffledPlaylist.addAll(songs);
 		}
 
-		this.advertisePlaylistChange();
+		this.advertiseSongChange();
 	}
 
 	public boolean isPlaying(){
@@ -322,8 +315,8 @@ public class MediaService extends Service implements MediaPlayer.OnErrorListener
 		return playlist.get(currentIndex);
 	}
 
-	private void advertisePlaylistChange(){
-		Log.i(TAG, "Mediaservice advertisePlaylistChange");
+	private void advertiseSongChange(){
+		Log.i(TAG, "Mediaservice advertiseSongChange");
 
 		WritableMap params = Arguments.createMap();
 		params.putMap("currentSong", getCurrentSong().toMap());

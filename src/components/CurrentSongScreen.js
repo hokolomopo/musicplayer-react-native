@@ -5,12 +5,17 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import React from 'react';
 import Slider from '@react-native-community/slider';
 import TextTicker from 'react-native-text-ticker'
-import { Easing, StatusBar, StyleSheet, Text, View } from 'react-native';
+import {Menu, MenuOption, MenuOptions, MenuTrigger, renderers} from 'react-native-popup-menu';
+import { StatusBar, StyleSheet, Text, TouchableNativeFeedback, View } from 'react-native';
 import { connect } from 'react-redux'
 
 import MediaModule from '../packages/Modules';
+import MyMenuOption from './util/MyMenuOption';
 import RoundIconButton from './util/RoundIconButton';
+import { MEDIA_ACTIONS } from '../store/MediaReducer';
 import {TextTickerOptions} from '../util/Constants'
+
+const LOOP_ICONS = ["repeat", "repeat", "repeat-once"]
 
 class CurrentSongScreen extends React.Component {
 
@@ -36,41 +41,48 @@ class CurrentSongScreen extends React.Component {
 
     componentWillUnmount() {
         this.props.navigation.removeListener(this.navListener)
-      }
+    }
     
-    _previous = () =>{
-        MediaModule.previous()
-    }
-
-    _play = () =>{
-        MediaModule.playPause()
-    }
-
-    _next = () =>{
-        MediaModule.next()
-    }
-
+    _Menu = (
+        <Menu ref={(ref) => { this.menuRef = ref; }}>
+            <MenuTrigger>
+                <RoundIconButton 
+                    onPress={() => {this.menuRef.open()}} 
+                    icon={<EntypoIcon name="dots-three-vertical" size={20} color="white"/>} 
+                    style={styles.optionButton} 
+                    hitSlop={10}/> 
+            </MenuTrigger>
+            <MenuOptions>
+                <MyMenuOption onSelect={() => {}} message="TODO" />
+            </MenuOptions>
+        </Menu>)
+    
 
     render() {
         //TODO animation onButtonPress
-      return (
+        
+        return (
         <LinearGradient style={styles.mainContainer} colors={['#373940', '#454853']} >
             <StatusBar backgroundColor={this.state.appBarColor} barStyle={"light-content"} translucent={true}/>
             <View style={styles.appBAr}>
-                <RoundIconButton name="arrow-back" size={30} color="white" style={styles.backButton} hitSlop={10}/>
-                <RoundIconButton icon={<EntypoIcon name="dots-three-vertical" size={20} color="white"/>} style={styles.optionButton} hitSlop={10}/>   
+                <RoundIconButton name="arrow-back" size={30} color="white" style={styles.backButton} hitSlop={10} onPress={this._back}/>
+                {/* <RoundIconButton icon={<EntypoIcon name="dots-three-vertical" size={20} color="white"/>} style={styles.optionButton} hitSlop={10}/>    */}
+                {this._Menu}
             </View>
+            
             <View style={styles.albumCoverContainer}>
                 <View style={styles.albumCover}/>
             </View>
+
             <View style={styles.textAndButtonsContainer}>
                 <RoundIconButton style={styles.playlistButton} icon={<MaterialCommunityIcons name="playlist-plus" size={25} color="white" />} hitSlop={10} style={styles.playlistButton}/>
                 <View style={styles.textContainer}>
-                    <TextTicker style={styles.title} {...TextTickerOptions}>They'll Never Take The Goood years I guess</TextTicker>
-                    <TextTicker style={styles.artist} {...TextTickerOptions}>William Fitzsimmons</TextTicker>
+                    <TextTicker style={styles.title} {...TextTickerOptions}>{this.props.currentSong.title}</TextTicker>
+                    <TextTicker style={styles.artist} {...TextTickerOptions}>{this.props.currentSong.artist}</TextTicker>
                 </View>
                 <RoundIconButton icon={<MaterialCommunityIcons name="playlist-music" size={25} color="white"/>}  hitSlop={10} style={styles.playlistButton}/>
             </View>
+
             <View style={styles.sliderContainer}>
                 <Text style={styles.timeText}>0:00</Text>
                 <Slider
@@ -82,26 +94,94 @@ class CurrentSongScreen extends React.Component {
                 />
                 <Text style={styles.timeText}>5:00</Text>
             </View>
+
             <View style={styles.mediabuttonsContainer}>
-                <RoundIconButton icon={<MaterialCommunityIcons name="repeat" size={23} color="white"/>} style={styles.optionButton} hitSlop={10}/>   
-                <RoundIconButton icon={<FoundationIcon name="previous" size={35} color="white"/>} style={styles.nextButton} hitSlop={10}/>   
-                <RoundIconButton icon={<FoundationIcon name="play" size={55} color="white"/>} style={styles.nextButton} hitSlop={10}/>   
-                <RoundIconButton icon={<FoundationIcon name="next" size={35} color="white"/>} style={styles.nextButton} hitSlop={10}/>  
-                <RoundIconButton icon={<MaterialCommunityIcons name="shuffle" size={23} color="white"/>} style={styles.optionButton} hitSlop={10}/>    
+                <RoundIconButton 
+                    icon={<MaterialCommunityIcons {...buttonsStyles[this.props.repeatMode]}/>} 
+                    onPress={this._changeLoopMode} 
+                    style={styles.optionButton} 
+                    hitSlop={10}/>   
+                <RoundIconButton 
+                    icon={<FoundationIcon name="previous" size={35} color="white"/>} 
+                    onPress={this._previous} 
+                    style={styles.nextButton} 
+                    hitSlop={10}/>   
+                <RoundIconButton
+                    icon={<FoundationIcon size={55} color="white" name={this.props.playState == "play" ? "pause" : "play"}/>} 
+                    onPress={this._play} 
+                    style={styles.nextButton} 
+                    hitSlop={10}/>   
+                <RoundIconButton 
+                    icon={<FoundationIcon name="next" size={35} color="white"/>} 
+                    onPress={this._next} 
+                    style={styles.nextButton} 
+                    hitSlop={10}/>  
+                <RoundIconButton 
+                    icon={<MaterialCommunityIcons {...this.props.shuffle ? buttonsStyles.shuffleOn : buttonsStyles.shuffleOff}/>} 
+                    onPress={this._toggleShuffle} 
+                    style={styles.optionButton} 
+                    hitSlop={10}/>    
             </View>
+
             <View style={styles.bottomContainer}>
                 <Text style={styles.numberOfSongsText}>3/1568</Text>
             </View>
 
         </LinearGradient>
-    )
+        )
+    }
+
+    _back = () => {
+        this.props.navigation.goBack()
+    }
+
+    _previous = () =>{
+        this.props.dispatch({ type: MEDIA_ACTIONS.previousSong })
+    }
+
+    _play = () =>{
+        this.props.dispatch({ type: MEDIA_ACTIONS.togglePlayState })
+    }
+
+    _next = () =>{
+        this.props.dispatch({ type: MEDIA_ACTIONS.nextSong })
+    }
+
+    _toggleShuffle = () =>{
+        let action = { type: "TOGGLE_SHUFFLE" }
+        this.props.dispatch(action)
+
+        //TODO send to MediaPlayer. Maybe in ruducer?
+    }
+
+    _changeLoopMode = () => {
+        let action = { type: "CHANGE_REPEAT_MODE" }
+        this.props.dispatch(action)
+
+        //TODO send to MediaPlayer. Maybe in ruducer?
     }
 }
 
+const mapStateToProps = (state /*, ownProps*/) => {
+    return {
+      currentSong: state.MediaReducer.currentSong,
+      playState: state.MediaReducer.playState,
+      shuffle: state.MediaReducer.shuffle,
+      repeatMode: state.MediaReducer.repeatMode
+    }
+  }
+  
+  
+  export default connect(
+    mapStateToProps,
+    null
+  )(CurrentSongScreen)
+  
 const styles = StyleSheet.create({
     mainContainer:{
         flex: 1,
         paddingTop: StatusBar.currentHeight,
+        // backgroundColor: "red"
     },
     appBAr:{
         height: 58,
@@ -114,8 +194,7 @@ const styles = StyleSheet.create({
         // backgroundColor:"red"
     },
     optionButton:{
-        paddingHorizontal:10,
-        borderRadius: 24,
+        padding:10,
         // backgroundColor:"red",
     },
     albumCoverContainer:{
@@ -181,7 +260,10 @@ const styles = StyleSheet.create({
         // backgroundColor:"red",
     },
     nextButton:{
-        // padding:10,
+        // backgroundColor:"red",
+        width: 50,
+        alignItems:"center",
+        justifyContent:"space-around",
     },
     bottomContainer:{
         height:30,
@@ -192,21 +274,35 @@ const styles = StyleSheet.create({
         fontSize:12,
         color:"white",
     },
-
-
-
-
 });
 
-const mapStateToProps = (state /*, ownProps*/) => {
-  return {
-    song: state.MediaReducer.currentSong,
-    playState: state.MediaReducer.playState
-  }
-}
+const buttonsStyles = {
+    noRepeat:{
+        name : "repeat",
+        color:"gray",
+        size:23,
+    },
+    repeatAll:{
+        name: "repeat",
+        color:"white",
+        size:23,
+    },
+    repeatOne:{
+        name: "repeat-once",
+        color:"white",
+        size:23,
+    },
 
+    shuffleOn:{
+        name: "shuffle",
+        color:"white",
+        size:23,
+    },
+    shuffleOff:{
+        name: "shuffle",
+        color:"gray",
+        size:23,
+    },
 
-export default connect(
-  mapStateToProps,
-  null
-)(CurrentSongScreen)
+};
+

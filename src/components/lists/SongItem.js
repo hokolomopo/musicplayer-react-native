@@ -3,7 +3,6 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import {Menu, MenuOption, MenuOptions, MenuTrigger} from 'react-native-popup-menu';
 
-import MediaModule from '../../packages/Modules';
 import MyMenuOption from '../util/MyMenuOption';
 
 class SongItem extends React.Component {
@@ -32,10 +31,7 @@ class SongItem extends React.Component {
     }
 
     _onSongClick = () =>{
-        console.log("OnSongclick")
-        var playlist = this.props.getPlaylist();
-        MediaModule.init(playlist, playlist.findIndex(item => (item.artist === this.props.artist && item.title === this.props.title)))
-
+        this.props.onSongClick(this.props.song);
     }
 
     render(){
@@ -46,10 +42,10 @@ class SongItem extends React.Component {
                     <View style={styles.cover}></View>
                     <View style={styles.textContainer}>
                         <View style={styles.artistTextContainer}>
-                            <Text numberOfLines={1} style={styles.artistText}>{this.props.artist}</Text>
+                            <Text numberOfLines={1} style={styles.artistText}>{this.props.song.artist}</Text>
                         </View>
                         <View  style={styles.titleTextContainer}>
-                            <Text numberOfLines={1} style={styles.titleText}>{this.props.title}</Text>
+                            <Text numberOfLines={1} style={styles.titleText}>{this.props.song.title}</Text>
                         </View>
                     </View>
                     {this._SongMenu()}

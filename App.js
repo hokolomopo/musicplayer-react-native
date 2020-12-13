@@ -126,7 +126,6 @@ const requestPermission = async () => {
       // console.log("Camera permission denied");
     }
     const hasPerm = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
-    console.log(hasPerm)
       if (hasPerm === true) {
       // console.log("You can use the camera");
     } else {

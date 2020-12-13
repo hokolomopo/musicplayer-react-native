@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 
 import ScrollableRecyclerView from '../util/ScrollableRecyclerView';
 import SongItem from '../lists/SongItem'
+import { MEDIA_ACTIONS } from '../../store/MediaReducer';
 
 const dataProvider = new DataProvider((r1, r2) => {
             return (r1.artist !== r2.artist) && (r1.title !== r2.title);
@@ -49,28 +50,23 @@ class SongsList extends React.Component  {
         return(<View style={styles.separator}/>)
     }
 
-    _getPlaylist = () =>{
-        return this.props.songs
+    _onSongClick = (song) =>{
+        this.props.dispatch({ type: MEDIA_ACTIONS.updatePlayingList, value: {list : this.props.songs, currentSong : song} })
     }
 
     _rowRenderer = (type, data) =>{
             return(
                 <View>
-                    <SongItem artist={data.artist} title={data.title} getPlaylist={this._getPlaylist}/>
+                    <SongItem song={data} onSongClick={this._onSongClick}/>
                     <View style={styles.separator}/>
                 </View>
             )
-
     }
 
     _DataProvider(){
         return new DataProvider((r1, r2) => {
             return (r1.artist !== r2.artist) || (r1.title !== r2.title); 
         })       
-    }
-
-    _onPress = () =>{
-        console.log("Hey")
     }
 
 
@@ -115,6 +111,9 @@ const styles = StyleSheet.create({
         backgroundColor: "orange"
     },
 });
-
-export default SongsList
-
+  
+  export default connect(
+    null,
+    null
+  )(SongsList)
+  
