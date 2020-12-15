@@ -1,4 +1,6 @@
-//https://github.com/sramezani/radio-buttons-react-native#readme
+// Component RadioButton, because for whetever reason it's not implemented in React Native
+// Credits to https://github.com/sramezani/radio-buttons-react-native
+// I added a prop onAnimationEnd to define a callback at the end of the (un)check animation
 
 import PropTypes from 'prop-types';
 import React from 'react';

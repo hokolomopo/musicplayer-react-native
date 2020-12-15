@@ -1,19 +1,13 @@
 import React from 'react';
-import {Animated, Dimensions, FlatList, PanResponder, StyleSheet, Text, TouchableWithoutFeedback, View} from 'react-native';
-import { BaseScrollView, DataProvider, LayoutProvider, RecyclerListView } from "recyclerlistview";
+import { DataProvider, LayoutProvider } from "recyclerlistview";
+import {Dimensions, StyleSheet, View} from 'react-native';
 import { connect } from 'react-redux'
 
 import ScrollableRecyclerView from '../util/ScrollableRecyclerView';
 import SongItem from '../lists/SongItem'
 import { MEDIA_ACTIONS } from '../../store/MediaReducer';
 
-const dataProvider = new DataProvider((r1, r2) => {
-            return (r1.artist !== r2.artist) && (r1.title !== r2.title);
-            // return r1 !== r2;
-});
-
-
-
+// Component that contain a list of songs 
 class SongsList extends React.Component  {
     
     constructor(props) {
@@ -21,7 +15,7 @@ class SongsList extends React.Component  {
         let { width } = Dimensions.get("window");
 
         this._layoutProvider = new LayoutProvider(
-            index => {
+            () => {
                 return 0
             },
             (type, dim) => {
@@ -51,7 +45,8 @@ class SongsList extends React.Component  {
     }
 
     _onSongClick = (song) =>{
-        this.props.dispatch({ type: MEDIA_ACTIONS.updatePlayingList, value: {list : this.props.songs, currentSong : song} })
+        //TODO : send sorted playlist correctly
+        this.props.dispatch({ type: MEDIA_ACTIONS.updatePlayingList, value: {list : this._getSortedSongs(), currentSong : song} })
     }
 
     _rowRenderer = (type, data) =>{
@@ -71,9 +66,9 @@ class SongsList extends React.Component  {
 
 
     render() {
-        // console.log("Render SongList")
         //TODO : end of preoject, verify that we only call render when the songs/the sort order change. If not, we call a sort function every time.
 
+        // Only render a list if there's songs to be displayed
         let toRender = this.props.songs.length == 0 ? null :
             <ScrollableRecyclerView 
             getDataProvider={this._DataProvider()}

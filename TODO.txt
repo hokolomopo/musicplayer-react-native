@@ -8,8 +8,3 @@
 - CurrentPlaylistScree
 - SongItem menu
 - SelectedSong in list
-
-
-
-- Equalizer
-- Minuteur de sommeil

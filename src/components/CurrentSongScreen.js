@@ -58,6 +58,10 @@ class CurrentSongScreen extends React.Component {
         </Menu>)
     
 
+    _goToPlaylistScreen = () =>{
+        this.props.navigation.navigate("CurrentPlaylist",  {})
+    }
+
     render() {
         //TODO animation onButtonPress
         
@@ -75,12 +79,22 @@ class CurrentSongScreen extends React.Component {
             </View>
 
             <View style={styles.textAndButtonsContainer}>
-                <RoundIconButton style={styles.playlistButton} icon={<MaterialCommunityIcons name="playlist-plus" size={25} color="white" />} hitSlop={10} style={styles.playlistButton}/>
+                <RoundIconButton 
+                    style={styles.playlistButton}
+                    icon={<MaterialCommunityIcons name="playlist-plus" size={25} color="white" />} 
+                    hitSlop={10} 
+                    style={styles.playlistButton}
+                    onPress={() => alert("Not implemented")} />
                 <View style={styles.textContainer}>
                     <TextTicker style={styles.title} {...TextTickerOptions}>{this.props.currentSong.title}</TextTicker>
                     <TextTicker style={styles.artist} {...TextTickerOptions}>{this.props.currentSong.artist}</TextTicker>
                 </View>
-                <RoundIconButton icon={<MaterialCommunityIcons name="playlist-music" size={25} color="white"/>}  hitSlop={10} style={styles.playlistButton}/>
+                <RoundIconButton 
+                    style={styles.playlistButton}
+                    icon={<MaterialCommunityIcons name="playlist-music" size={25} color="white" />} 
+                    hitSlop={10} 
+                    style={styles.playlistButton}
+                    onPress={this._goToPlaylistScreen} />
             </View>
 
             <View style={styles.sliderContainer}>

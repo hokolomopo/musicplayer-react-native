@@ -8,6 +8,8 @@ import RoundIconButton from './util/RoundIconButton';
 import { MEDIA_ACTIONS } from '../store/MediaReducer';
 import {TextTickerOptions} from '../util/Constants'
 
+// View containing a bar that display the current song and Media controls (play/next/previous)
+// Has a gesture handler to navigate when touched/when swiped up
 class CurrentSongBar extends React.Component {
 
     currentSongViewY = 0
@@ -55,6 +57,21 @@ class CurrentSongBar extends React.Component {
         // console.log(event.nativeEvent)
     }
 
+    _previous = () =>{
+        console.log("_previous")
+        this.props.dispatch({ type: MEDIA_ACTIONS.previousSong })
+    }
+
+    _play = () =>{
+        console.log("_play")
+        this.props.dispatch({ type: MEDIA_ACTIONS.togglePlayState })
+    }
+
+    _next = () =>{
+        console.log("_next")
+        this.props.dispatch({ type: MEDIA_ACTIONS.nextSong })
+    }
+
 
     render() {
       return (
@@ -72,38 +89,23 @@ class CurrentSongBar extends React.Component {
             </View>
             <View style={styles.buttonsView}> 
                 <RoundIconButton 
-                        onPress={() => {this._previous}} 
+                        onPress={this._previous} 
                         icon={<Icon name="previous" size={40} color="#3F2F2F" style={{paddingRight : 6}} />} 
                         style={styles.button} 
                         hitSlop={5}/> 
                 <RoundIconButton 
-                        onPress={() => {this._play}} 
+                        onPress={this._play} 
                         icon={<Icon name={this.props.playState == "play" ? "pause" : "play"} size={40} color="#3F2F2F" />} 
                         style={styles.button} 
                         hitSlop={5}/> 
                 <RoundIconButton 
-                        onPress={() => {this._previous}} 
+                        onPress={this._next} 
                         icon={<Icon name="next" size={40} color="#3F2F2F" />} 
                         style={styles.button} 
                         hitSlop={5}/> 
             </View>
           </View>
     )
-    }
-
-    _previous = () =>{
-        console.log("_previous")
-        this.props.dispatch({ type: MEDIA_ACTIONS.previousSong })
-    }
-
-    _play = () =>{
-        console.log("_play")
-        this.props.dispatch({ type: MEDIA_ACTIONS.togglePlayState })
-    }
-
-    _next = () =>{
-        console.log("_next")
-        this.props.dispatch({ type: MEDIA_ACTIONS.nextSong })
     }
 
 }

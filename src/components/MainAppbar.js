@@ -1,20 +1,19 @@
-import AwesomeAlert from 'react-native-awesome-alerts';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
-import { BackHandler, Pressable, StyleSheet, Text, TextInput, TouchableNativeFeedback, TouchableWithoutFeedback, View } from 'react-native';
-import {Menu, MenuOption, MenuOptions, MenuTrigger, renderers} from 'react-native-popup-menu';
+import { BackHandler, Pressable, StyleSheet, Text, TextInput, TouchableNativeFeedback, View } from 'react-native';
+import {Menu, MenuOptions, MenuTrigger} from 'react-native-popup-menu';
 import { connect } from 'react-redux'
 
 import MyMenuOption from './util/MyMenuOption';
-import RadioButtonRN from './util/RadioButtonRN';
 import RoundIconButton from './util/RoundIconButton';
-import SortByAlert from './util/SortByAlert';
 import {SORT_SONGS_BY_VALUES} from '../store/UIReducer';
 import { SongTabActions } from './tabs/ActionsByTabs';
 
 const BAR_HEIGHT = 58
 
+// Appbar for the HomeScreen
+// Contains a search function and a drop down menu
 class MainAppbar extends React.Component {
 
   
@@ -74,10 +73,12 @@ class MainAppbar extends React.Component {
     })
   }
 
+  // Appbar displayed when in searching mode
     SearchingBar = () => {
       return(
         <View style={styles.container}>
             {this.state.searchString != "" ? null :
+            // Icon used with absolute position to be displayed inside the search field
               <View style={styles.searchIconContainer}>
                   <MaterialIcon name="search" size={28} color="rgba(0, 0, 0, 0.4)"/>
               </View>}
@@ -87,12 +88,14 @@ class MainAppbar extends React.Component {
                 style={styles.input}
                 onChangeText={(searchString) => {this.setState({searchString : searchString})}}
                 underlineColorAndroid="transparent"
+                placeholder={"Not implemented"}
             />
 
         </View>
       )
     }
 
+    //Get elements of the drop down
     _getMenuOptions = () =>{
       let menuOptions = []
 
@@ -219,7 +222,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = () => {
   return {
     // sortBy: state.UIReducer.sortSongsBy
   }

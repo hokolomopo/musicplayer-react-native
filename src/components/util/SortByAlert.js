@@ -5,6 +5,7 @@ import { StyleSheet, View } from 'react-native';
 
 import RadioButtonRN from './RadioButtonRN';
 
+// Class that display an alert asking the user how the songs should be sorted 
 class SortByAlert extends React.Component {
     
     AlertView = () =>{

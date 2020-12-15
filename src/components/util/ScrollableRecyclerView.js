@@ -2,6 +2,8 @@ import React from 'react';
 import {Animated, Dimensions, PanResponder, StyleSheet, View} from 'react-native';
 import { LayoutProvider, RecyclerListView } from "recyclerlistview";
 
+// Extend the RecyclerListView class to add a scrollbar on the side.
+// I'm kinda happy with this class, but there is no reason for React Native to not have either scrollbars or RecyclerViews
 class ScrollableRecyclerView extends React.Component {
 
     constructor(props) {
@@ -75,18 +77,6 @@ class ScrollableRecyclerView extends React.Component {
 
     _onLayout = (event) => {
         this.heightScrollBar = event.nativeEvent.layout.height
-
-        // this.scrollbarRef.measure( (fx, fy, width, height, px, py) => {
-        //     // console.log('Component width is: ' + width)
-        //     // console.log('Component height is: ' + height)
-        //     // console.log('X offset to frame: ' + fx)
-        //     // console.log('Y offset to frame: ' + fy)
-        //     // console.log('X offset to page: ' + px)
-        //     // console.log('Y offset to page: ' + py)
-        //     this.offsetYScrollBar = py
-        //     this.heightScrollBar = height
-        //     this.maxY = this.heightScrollBar - this.heightScrollCursor
-        // })       
     }
 
     _onScroll = (event) =>{
@@ -106,16 +96,11 @@ class ScrollableRecyclerView extends React.Component {
         // Cursor position = panValue, goes from 0 to cursorMaxY
         let panValue = offsetY /(contentSize - layoutHeight) * cursorMaxY 
         panValue = Math.min(Math.max(panValue, 0 - this.pan._offset), cursorMaxY);
-        // panValue = panValue >= 0 - this.pan._offset? panValue : - this.pan._offset
-        // panValue = panValue >= cursorMaxY - this.pan._offset? cursorMaxY - this.pan._offset: panValue
-
-        // console.log(event.nativeEvent)
 
         this.pan.setValue(panValue)
     }
 
     _getScrollCursorHeight = () =>{
-        // Change cursor size between [400 - 50] for dataset size [<10 : > 100]. The maths are kinda bad but w/e
         let dataSize = this.props.data.length
         dataSize = Math.min(Math.max(dataSize, 10), 100);
         let cursorSize = dataSize * (-3.8) + 438
@@ -123,8 +108,6 @@ class ScrollableRecyclerView extends React.Component {
     }
 
     render() {
-        // console.log("Render ScrollableRecyclerView" )
-        // console.log(this.props.data)
         this.heightScrollCursor = this._getScrollCursorHeight()
 
 

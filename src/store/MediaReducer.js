@@ -1,13 +1,17 @@
 import MediaModule from '../packages/Modules';
 
-export const REPEAT_MODE = ["noRepeat", "repeatAll", "repeatOne"]
+export const REPEAT_MODE = {
+    noRepeat : "noRepeat",
+    repeatAll : "repeatAll",
+    repeatOne : "repeatOne",
+}
 
 const initialState = {
     songs: [{title:"title", artist:"artist"}] ,
     currentSong:{title:"title", artist:"artist"},
     playState:"pause",
     shuffle:false,
-    repeatMode:REPEAT_MODE[0],
+    repeatMode:REPEAT_MODE.noRepeat,
     playingList:[]
 }
 
@@ -22,8 +26,9 @@ export const MEDIA_ACTIONS = {
     changeRepeatMode : "CHANGE_REPEAT_MODE",
 }
 
-
+// Redux reducer for Media actions/states 
 function MediaReducer(state = initialState, action) {
+    //TODO : Communicate with the Android code when an action is taken (eg. do MediaModule.next())
     switch (action.type) {
         // UPDATE_SONGS
         case MEDIA_ACTIONS.updateSongs:
@@ -55,15 +60,32 @@ function MediaReducer(state = initialState, action) {
             }
             return nextState
         // NEXT_SONG
-        case MEDIA_ACTIONS.nextSong://TODO
+        case MEDIA_ACTIONS.nextSong:
+            let currentIndexN = state.playingList.indexOf(state.currentSong)
+            
+            currentIndexN = currentIndexN + 1
+            if(currentIndexN == state.playingList.length && state.repeatMode == REPEAT_MODE.repeatAll)
+                currentIndexN = 0
+            else if(currentIndexN == state.playingList.length)
+                currentIndexN = state.playingList.length - 1
             nextState = {
                 ...state, 
+                currentSong : state.playingList[currentIndexN]
             }
             return nextState
         // PREVIOUS_SONG
-        case MEDIA_ACTIONS.previousSong://TODO
+        case MEDIA_ACTIONS.previousSong:
+            let currentIndex = state.playingList.indexOf(state.currentSong)
+
+            currentIndex = currentIndex - 1
+            if(currentIndex < 0 && state.repeatMode == REPEAT_MODE.repeatAll)
+                currentIndex = state.playingList.length - 1
+            else if(currentIndex < 0)
+                currentIndex = 0
+
             nextState = {
                 ...state, 
+                currentSong : state.playingList[currentIndex]
             }
             return nextState
         // TOGGLE_SHUFFLE
@@ -75,10 +97,17 @@ function MediaReducer(state = initialState, action) {
             return nextState
         // CHANGE_REPEAT_MODE
         case MEDIA_ACTIONS.changeRepeatMode:
-            let index = (REPEAT_MODE.indexOf(state.repeatMode) + 1) % REPEAT_MODE.length
+            let repeatMode
+            if(state.repeatMode == REPEAT_MODE.noRepeat)
+                repeatMode = REPEAT_MODE.repeatAll
+            else if(state.repeatMode == REPEAT_MODE.repeatAll)
+                repeatMode = REPEAT_MODE.repeatOne
+            else if(state.repeatMode == REPEAT_MODE.repeatOne)
+                repeatMode = REPEAT_MODE.noRepeat
+
             nextState = {
                 ...state, 
-                repeatMode : REPEAT_MODE[index]
+                repeatMode : repeatMode
             }
             return nextState
         

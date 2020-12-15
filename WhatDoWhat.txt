@@ -1,6 +1,0 @@
-States : 
-    - Play/Pause state : Managed by MediaPlayer, send events to HomeScreen => Redux Store
-    - CurrentSong : Managed by MediaPlayer, send events to HomeScreen => Redux Store, should save + init to java //TODO : save+init
-    - Playlist : Managed by MediaPlayer, send events to HomeScreen => Redux Store, should save + init to java //TODO : save+init
-    - Random : Managed by Redux Store, should save + init in java //TODO 
-    - QueueMode : Managed by Redux Store, should save + init in java //TODO

@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux'
 
 import MyMenuOption from '../util/MyMenuOption';
 import SortByAlert from '../util/SortByAlert';
 import {SORT_SONGS_BY_VALUES} from '../../store/UIReducer';
 
+// File containing the actions that are added in the ActionBar for each tab
 class _SongTabActions extends React.Component {
 
   

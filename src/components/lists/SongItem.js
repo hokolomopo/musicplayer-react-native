@@ -1,10 +1,11 @@
 import Icon from 'react-native-vector-icons/Entypo';
 import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableNativeFeedback, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import {Menu, MenuOption, MenuOptions, MenuTrigger} from 'react-native-popup-menu';
+import {Menu, MenuOptions, MenuTrigger} from 'react-native-popup-menu';
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 
 import MyMenuOption from '../util/MyMenuOption';
 
+//Component representing a Song in a List
 class SongItem extends React.Component {
 
     constructor(props) {
@@ -15,6 +16,7 @@ class SongItem extends React.Component {
         }
     }
 
+    // Menu displayed when clicking the 3 dots on the side of this component
     _SongMenu = () => {
         return(
                 <Menu>

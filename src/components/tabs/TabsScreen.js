@@ -28,6 +28,7 @@ const renderTabBar = props => (
     />
   );
   
+// Screen with a list of tabs
 class TabsScreen extends React.Component {
 
     constructor(props) {
@@ -38,11 +39,15 @@ class TabsScreen extends React.Component {
             renderScene: null,
              index: 0,
              tabs: [
-            { key: 'titles', title: 'Titles' },
-            { key: 'second', title: 'Second' },{ key: 'third', title: 'third' },{ key: 'fourth', title: 'fourth' },{ key: 'fifth', title: 'fifth' },]
+                { key: 'titles', title: 'Titles' },
+                { key: 'second', title: 'Artists' },
+                { key: 'third', title: 'Albums' },
+                { key: 'fourth', title: 'Playlists' },
+                { key: 'fifth', title: 'Folders' },]
         };
     }
 
+    // Change navbar color on mount or on navigation
     componentDidMount() {
         MediaModule.changeNavBarColor("white")
         
@@ -92,6 +97,7 @@ class TabsScreen extends React.Component {
 
 export default TabsScreen
 
+// Wrapper for a SongList with Redux
 class _SongsTab extends React.Component {
     render(){
         return (

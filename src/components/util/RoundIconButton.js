@@ -1,12 +1,9 @@
-import EntypoIcon from 'react-native-vector-icons/Entypo';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Appbar } from 'react-native-paper';
-import { BackHandler, Pressable, StyleSheet, Text, TextInput, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
-import {Menu, MenuOption, MenuOptions, MenuTrigger} from 'react-native-popup-menu';
-import { Searchbar } from 'react-native-paper';
+import { StyleSheet, TouchableNativeFeedback, View } from 'react-native';
 
+// Wrapper for a Button containing an Icon
 class RoundIconButton extends React.Component {
     render() {
       return(
@@ -30,18 +27,8 @@ class RoundIconButton extends React.Component {
 
 const styles = StyleSheet.create({
     mainContainer:{
-    //   backgroundColor: "blue",
-    //   flexDirection: "row",
-    //   alignItems:"center",
-    //   height:BAR_HEIGHT, 
     },
     iconContainer:{
-    //   height:BAR_HEIGHT, 
-    //   width:BAR_HEIGHT,
-    //   alignItems:"center", 
-    //   justifyContent:"center",
-    //   borderRadius: 35,
-    //   backgroundColor:"red"
     },
 });
 

@@ -1,12 +1,10 @@
 import React from 'react';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
-import {LogBox, NativeEventEmitter, NativeModules, StatusBar, StyleSheet, Text, TextInput} from 'react-native';
-import { SceneMap, TabView } from 'react-native-tab-view';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {NativeEventEmitter, NativeModules, StyleSheet} from 'react-native';
 import { connect } from 'react-redux'
 
+import CurrentPlaylistScreen from './CurrentPlaylistScreen';
 import CurrentSongScreen from './CurrentSongScreen';
-import MainAppbar from './MainAppbar';
 import MediaModule from '../packages/Modules';
 import TabsScreen from './tabs/TabsScreen';
 
@@ -14,7 +12,7 @@ const { EVENT_SONG_CHANGED , EVENT_PLAY_PAUSE} = MediaModule.getConstants();
 
 const Stack = createStackNavigator();
 
-
+// Home screen of the application
 class HomeScreen extends React.Component {
 
     constructor(props) {
@@ -22,6 +20,7 @@ class HomeScreen extends React.Component {
     
     }
 
+    // Define listeners that will recieve events from the Android code
     componentDidMount(){
         const eventEmitter = new NativeEventEmitter(NativeModules.MediaModule);
         this.eventListener = eventEmitter.addListener(EVENT_SONG_CHANGED, (event) => {
@@ -43,14 +42,20 @@ class HomeScreen extends React.Component {
       this.eventListener.remove();
     }
 
+    // Get all the songs from the Android code
     async _getSongs() {
         console.log("GetSongs")
         const media = await MediaModule.getMedia();
         
         let aa = [...media]
-        aa = media.slice(0, 2)
-        // console.log(aa)
-        
+
+        // delete duplicates
+        let seen = new Set();
+        aa= aa.filter(item => {
+            return seen.has(item) ? false : seen.add(item);
+        });
+    
+
         const action = { type: "UPDATE_SONGS", value: aa }
         this.props.dispatch(action)
     }
@@ -70,6 +75,8 @@ class HomeScreen extends React.Component {
           >
             <Stack.Screen name="Home" component={TabsScreen}/>
             <Stack.Screen name="CurrentSong" component={CurrentSongScreen}/> 
+            <Stack.Screen name="CurrentPlaylist" component={CurrentPlaylistScreen}/> 
+
       </Stack.Navigator>
     );
   }

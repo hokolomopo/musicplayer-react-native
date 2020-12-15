@@ -1,8 +1,8 @@
-import Icon from 'react-native-vector-icons/Entypo';
 import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
-import {Menu, MenuOption, MenuOptions, MenuTrigger} from 'react-native-popup-menu';
+import {MenuOption} from 'react-native-popup-menu';
+import { StyleSheet, Text } from 'react-native';
 
+// Custom view displayed in DragDown menus
 class MyMenuOption extends React.Component {
 
     constructor(props) {
@@ -23,7 +23,6 @@ class MyMenuOption extends React.Component {
 const styles = StyleSheet.create({
     view: {
         height: 50,
-        // alignItems: "center",
         justifyContent: "center"
     },
     text: {
